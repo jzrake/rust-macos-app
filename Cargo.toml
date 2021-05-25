@@ -1,5 +1,5 @@
 [package]
-name = "rust-app"
+name = "rust-macos-app"
 version = "0.1.0"
 edition = "2018"
 
