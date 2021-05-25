@@ -8,9 +8,12 @@
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
+    NSLog(@"Will finish launching");
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    NSLog(@"Did finish launching");
+
     id appName = @"Rust App";
     [NSApplication sharedApplication];
     [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
@@ -39,6 +42,10 @@
     [window setTitle:appName];
     [window cascadeTopLeftFromPoint:NSMakePoint(20, 20)];
     [window makeKeyAndOrderFront:nil];
+}
+
+- (void) applicationWillTerminate:(NSNotification *)notification {
+    NSLog(@"Will terminate");
 }
 
 @end
