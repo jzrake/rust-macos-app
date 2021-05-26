@@ -2,10 +2,14 @@
 
 
 
+
 struct ForeignView {
-    void (*draw)(void*);
-    void* state;
+    void (*draw)(const void*);
+    void (*handle)(void*);
+    void *state;
 };
+
+
 
 
 @interface View: NSView {
@@ -20,7 +24,13 @@ struct ForeignView {
 - (void)drawRect:(NSRect)dirtyRect {
     self->foreignView.draw(self->foreignView.state);
 }
+- (void)mouseDown:(NSEvent *)event {
+    self->foreignView.handle(self->foreignView.state);
+    self.needsDisplay = true;
+}
 @end
+
+
 
 
 @interface Delegate: NSObject<NSApplicationDelegate> {
@@ -28,8 +38,7 @@ struct ForeignView {
 }
 @end
 
-@implementation Delegate {
-}
+@implementation Delegate
 
 -(id)initWithForeignView:(struct ForeignView)view
 {
@@ -71,7 +80,7 @@ struct ForeignView {
     [view.layer setDrawsAsynchronously:YES];
 
     id window = [[NSWindow alloc]
-        initWithContentRect:NSMakeRect(0, 0, 200, 200)
+        initWithContentRect:NSMakeRect(0, 0, 600, 600)
         styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable
         backing:NSBackingStoreBuffered
         defer:YES
@@ -85,18 +94,27 @@ struct ForeignView {
 - (void) applicationWillTerminate:(NSNotification *)notification {
     NSLog(@"Will terminate");
 }
-
 @end
 
-void app_launch(struct ForeignView view)
+
+
+
+void liquid_launch_app(struct ForeignView view)
 {
     NSApplication* app = [NSApplication sharedApplication];
     [app setDelegate:[[Delegate alloc] initWithForeignView:view]];
     [app run];
 }
 
-void ct_draw_text(const char* text)
+
+
+
+void liquid_draw_text(void* text, unsigned long length)
 {
-    id string = [NSString stringWithUTF8String:text];
+    NSString *string = [[NSString alloc]
+        initWithBytesNoCopy:text
+        length:length
+        encoding:NSUTF8StringEncoding
+        freeWhenDone:NO];
     [string drawAtPoint:NSMakePoint(0, 0) withAttributes:nil];
 }
