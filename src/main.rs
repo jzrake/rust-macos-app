@@ -1,3 +1,5 @@
+pub mod core_graphics;
+
 #[repr(C)]
 pub struct ForeignView {
     draw: extern fn(*const std::ffi::c_void),
@@ -6,8 +8,9 @@ pub struct ForeignView {
 }
 
 extern "C" {
-    fn liquid_launch_app(view: ForeignView);
-    fn liquid_draw_text(text: *const u8, length: usize);
+    pub fn liquid_launch_app(view: ForeignView);
+    pub fn liquid_draw_text(text: *const u8, length: usize);
+    pub fn liquid_get_current_context() -> *const std::ffi::c_void;
 }
 
 pub fn draw_text(text: &str) {
