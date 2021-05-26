@@ -1,4 +1,5 @@
 pub mod core_graphics;
+pub mod cf_string;
 
 #[repr(C)]
 pub struct ForeignView {

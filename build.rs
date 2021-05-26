@@ -4,4 +4,5 @@ fn main() {
     cc::Build::new().file("src/app.m").compile("app.a");
     cc::Build::new().file("src/core_graphics.m").compile("core_graphics.a");
     cc::Build::new().file("src/cf_string.m").compile("cf_string.a");
+    cc::Build::new().file("src/cf_attributed_string.m").compile("cf_attributed_string.a");
 }
