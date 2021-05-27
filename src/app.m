@@ -118,3 +118,11 @@ void liquid_draw_text(void* text, unsigned long length)
         freeWhenDone:NO];
     [string drawAtPoint:NSMakePoint(0, 0) withAttributes:nil];
 }
+
+
+
+
+CGContextRef liquid_get_current_context()
+{
+    return NSGraphicsContext.currentContext.CGContext;
+}

@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
+core-foundation = "0.9.1"
+core-graphics = "0.22.2"
 
 [build-dependencies]
 cc = "*"

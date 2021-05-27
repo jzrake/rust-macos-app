@@ -1,4 +1,3 @@
-pub mod core_graphics;
 pub mod cf_string;
 
 #[repr(C)]
@@ -11,7 +10,22 @@ pub struct ForeignView {
 extern "C" {
     pub fn liquid_launch_app(view: ForeignView);
     pub fn liquid_draw_text(text: *const u8, length: usize);
-    pub fn liquid_get_current_context() -> *const std::ffi::c_void;
+    pub fn liquid_get_current_context() -> core_graphics::sys::CGContextRef;
+}
+
+pub fn current_core_graphics_context() -> Option<core_graphics::context::CGContext>
+{
+    use core_graphics::context::CGContext;
+    let context = unsafe {
+        liquid_get_current_context()
+    };
+    if context != std::ptr::null_mut() {
+        unsafe {
+            Some(CGContext::from_existing_context_ptr(context))
+        }
+    } else {
+        None
+    }
 }
 
 pub fn draw_text(text: &str) {
@@ -65,6 +79,16 @@ impl App for MyApp {
 }
 
 fn main() {
+
+    use core_foundation::string::*;
+    use core_foundation::base::*;
+    use std::ptr::null;
+    let string = "hello";
+
+    unsafe {
+        CFStringCreateWithBytesNoCopy(null(), string.as_ptr(), string.len() as isize, kCFStringEncodingUTF8, 0, kCFAllocatorNull);
+    }
+
     let state = MyApp{text: "hello".into()};
     run(state);
 }
